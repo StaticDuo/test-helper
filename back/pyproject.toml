@@ -1,0 +1,6 @@
+[tool.ruff]
+line-length = 150  # 기본 줄 길이 설정
+[tool.ruff.lint]
+select = ["E", "W", "F"]  # 선택할 검사 코드
+ignore = ["E501"]  # 무시할 검사 코드
+exclude = ["tests/*"]  # 특정 디렉토리 제외
