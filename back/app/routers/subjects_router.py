@@ -2,15 +2,16 @@ from typing import List
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from app.schemas.subject_schema import SubjectRequest, SubjectResponse
+from app.schemas.exam_schema import ExamResponse
 from app.db import get_db
 from app.services.subject_service import (
     create_subject,
     get_subject,
     get_subject_by_id,
+    get_exams_by_subject,
     patch_subject_by_id,
     delete_subject_by_id,
 )
-
 
 router = APIRouter()
 
@@ -60,6 +61,22 @@ def get_subject_by_id_endpoint(subject_id: int, db: Session = Depends(get_db)):
     """
     subject = get_subject_by_id(db, subject_id)
     return subject
+
+
+@router.get("/subjects/{subject_id}/exams", response_model=List[ExamResponse])
+def get_exams_by_subject_endpoint(subject_id: int, db: Session = Depends(get_db)):
+    """
+    특정 ID에 해당하는 과목에 포함된 시험 정보를 조회하는 엔드포인트
+
+    Args:
+        subject_id (int): 조회할 과목의 고유 ID
+        db (Session): SQLAlchemy 데이터베이스 세션 객체
+
+    Returns:
+        List[ExamResponse]: 조건에 해당하는 시험 정보 리스트
+    """
+    exams = get_exams_by_subject(db, subject_id)
+    return exams
 
 
 @router.patch("/subjects/{subject_id}", response_model=SubjectResponse)
