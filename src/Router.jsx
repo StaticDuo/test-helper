@@ -11,6 +11,7 @@ import SignupPage from "./pages/auth/SignupPage";
 
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import PublicRoute from "./components/auth/PublicRoute";
+import HomePage from "./pages/HomePage";
 
 function Router() {
   return (
@@ -23,7 +24,8 @@ function Router() {
         </Route>
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<Layout />}>
-            <Route index element={<SubjectListPage />} />
+            <Route index element={<HomePage />} />
+            <Route path="subjects" element={<SubjectListPage />} />
             <Route path="subjects/:subjectId" element={<SubjectDetailPage />} />
             <Route path="exams/upload" element={<ExamUploadPage />} />
             <Route path="exams/:examId/take" element={<ExamTakingPage />} />

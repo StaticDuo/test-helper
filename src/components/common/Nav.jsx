@@ -9,7 +9,7 @@ const Nav = () => {
           <IconPlaceholder>↑</IconPlaceholder>
           <NavText>시험 업로드</NavText>
         </NavItem> */}
-        <NavItem to="/">
+        <NavItem to="/subjects">
           <IconPlaceholder>✎</IconPlaceholder>
           <NavText>시험보기</NavText>
         </NavItem>
