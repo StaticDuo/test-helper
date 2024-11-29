@@ -2,11 +2,13 @@ from typing import List
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from app.schemas.exam_schema import ExamRequest, ExamResponse
+from app.schemas.question_schema import QuestionResponse
 from app.db import get_db
 from app.services.exam_service import (
     create_exam,
     get_exam,
     get_exam_by_id,
+    get_questions_by_exam,
     patch_exam_by_id,
     delete_exam_by_id,
 )
@@ -60,6 +62,23 @@ def get_exam_by_id_endpoint(exam_id: int, db: Session = Depends(get_db)):
     """
     exam = get_exam_by_id(db, exam_id)
     return exam
+
+
+@router.get("/exams/{exam_id}/questions", response_model=List[QuestionResponse])
+def get_questions_by_exam_endpoint(exam_id: int, db: Session = Depends(get_db)):
+    """
+    특정 ID에 해당하는 시험에 포함된 문제 정보를 조회하는 엔드포인트
+
+    Args:
+        exam_id (int): 조회할 시험의 고유 ID
+        db (Session): SQLAlchemy 데이터베이스 세션 객체
+
+    Returns:
+        List[ExamResponse]: 조건에 해당하는 문제 정보 리스트
+
+    """
+    questions = get_questions_by_exam(db, exam_id)
+    return questions
 
 
 @router.patch("/exams/{exam_id}", response_model=ExamResponse)
