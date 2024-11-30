@@ -23,11 +23,12 @@ def get_question_by_id(db: Session, question_id: int) -> Question:
     return db.query(Question).filter(Question.question_id == question_id).first()
 
 
+# Question 수정 함수
 def patch_question_by_id(db: Session, question_id: int, question_data: QuestionRequest) -> Question:
     patched_question = get_question_by_id(db, question_id)
 
     if patched_question:
-        update_data = question_data.dict(exclude_unset=True)
+        update_data = question_data.model_dump(exclude_unset=True)
         for key, value in update_data.items():
             setattr(patched_question, key, value)
 

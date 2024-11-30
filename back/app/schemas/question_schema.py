@@ -4,6 +4,7 @@ from pydantic import BaseModel
 # 요청(Request) 스키마
 class QuestionRequest(BaseModel):
     exam_id: int
+    question_number: int
     question_text: str
     question_type: str
 
@@ -12,6 +13,7 @@ class QuestionRequest(BaseModel):
 class QuestionResponse(BaseModel):
     question_id: int
     exam_id: int
+    question_number: int
     question_text: str
     question_type: str
 
