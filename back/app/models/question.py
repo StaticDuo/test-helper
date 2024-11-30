@@ -8,7 +8,7 @@ class Question(Base):
 
     question_id = Column(Integer, primary_key=True, autoincrement=True)
     exam_id = Column(Integer, ForeignKey("exams.exam_id"), nullable=False)
-    question_number = Column(Integer, question_number=False)
+    question_number = Column(Integer, nullable=False)
     question_text = Column(Text, nullable=False)
     question_type = Column(String(10), nullable=False)  # '0': 주관식 or '1': 객관식
 
