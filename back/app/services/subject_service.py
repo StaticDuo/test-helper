@@ -1,7 +1,9 @@
 from sqlalchemy.orm import Session, joinedload
 from app.models.subject import Subject
 from app.models.exam import Exam
+from app.models.question import Question
 from app.schemas.subject_schema import SubjectRequest
+import random
 
 
 # Subject 생성 함수
@@ -28,6 +30,22 @@ def get_subject_by_id(db: Session, subject_id: int) -> Subject:
 def get_exams_by_subject(db: Session, subject_id: int) -> Exam:
     subject = db.query(Subject).options(joinedload(Subject.exams)).filter(Subject.subject_id == subject_id).first()
     return subject.exams
+
+
+# Subject에 속한 Questions 조회 함수
+def get_questions_by_subject(db: Session, subject_id: int, limit: int, randomize: bool) -> Question:
+    exams = get_exams_by_subject(db, subject_id)
+
+    all_questions = list()
+    for exam in exams:
+        all_questions.extend(exam.questions)
+
+    if randomize:
+        selected_questions = random.sample(all_questions, min(len(all_questions), limit))
+    else:
+        selected_questions = all_questions[:limit]
+
+    return selected_questions
 
 
 # Subject 수정 함수
