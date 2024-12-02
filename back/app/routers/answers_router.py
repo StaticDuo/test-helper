@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Union
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from app.schemas.answer_schema import AnswerRequest, AnswerResponse
@@ -15,20 +15,23 @@ from app.services.answer_service import (
 router = APIRouter()
 
 
-@router.post("/answers", response_model=AnswerResponse)
-def create_answer_endpoint(answer: AnswerRequest, db: Session = Depends(get_db)):
+@router.post("/answers", response_model=List[AnswerResponse])
+def create_answer_endpoint(answers: Union[AnswerRequest, List[AnswerRequest]], db: Session = Depends(get_db)):
     """
     새로운 정답 정보를 생성하는 엔드포인트
 
     Args:
-        answer (AnswerRequest): 생성할 정답의 요청 데이터
+        answers (Union[AnswerRequest, List[AnswerRequest]]): 생성할 정답의 요청 데이터 또는 그 리스트
         db (Session): SQLAlchemy 데이터베이스 세션 객체
 
     Returns:
-        AnswerResponse: 생성된 정답의 정보
+        List[AnswerResponse]: 생성된 정답의 정보 리스트
     """
-    new_answer = create_answer(db, answer)
-    return new_answer
+    if isinstance(answers, AnswerRequest):
+        answers = [answers]
+    
+    new_answers = create_answer(db, answers)
+    return new_answers
 
 
 @router.get("/answers", response_model=List[AnswerResponse])
