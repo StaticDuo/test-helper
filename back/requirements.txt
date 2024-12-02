@@ -6,3 +6,6 @@ requests
 python-dotenv
 ruff
 pymysql
+python-jose
+passlib
+bcrypt

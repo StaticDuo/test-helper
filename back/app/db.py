@@ -1,23 +1,14 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 from sqlalchemy.pool import QueuePool
-from dotenv import load_dotenv
-import os
+from app.config import settings
 import urllib.parse
 
-# 환경 변수 로드
-load_dotenv()
-
-# 데이터베이스 접근정보
-db_user = os.getenv("DB_USER")
-db_password = os.getenv("DB_PASSWORD")
-db_host = os.getenv("DB_HOST")
-db_name = os.getenv("DB_NAME")
 
 # URL 인코딩 적용
-encoded_password = urllib.parse.quote_plus(db_password)
+encoded_password = urllib.parse.quote_plus(settings.db.DB_PASSWORD)
 
-DATABASE_URL = f"mysql+pymysql://{db_user}:{encoded_password}@{db_host}/{db_name}"
+DATABASE_URL = f"mysql+pymysql://{settings.db.DB_USER}:{encoded_password}@{settings.db.DB_HOST}/{settings.db.DB_NAME}"
 
 # 데이터베이스 연결 설정
 engine = create_engine(
