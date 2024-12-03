@@ -2,10 +2,12 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LoginPresenter from "./LoginPresenter";
 
+import { userLogin } from "../../services/authService";
+
 const LoginPage = () => {
   const navigate = useNavigate();
   const [values, setValues] = useState({
-    email: "",
+    id: "",
     password: "",
   });
   const [errors, setErrors] = useState({});
@@ -43,9 +45,11 @@ const LoginPage = () => {
 
     setIsLoading(true);
     try {
-      // 임시 API 호출 로직
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      localStorage.setItem("token", "example_token"); // 실제 토큰으로 교체 예정
+      const response = await userLogin(values);
+      console.log(response);
+
+      localStorage.setItem("accessToken", response.access_token);
+      localStorage.setItem("refreshToken", response.refresh_token);
       navigate("/");
     } catch (error) {
       console.error(error);

@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SignupPresenter from "./SignupPresenter";
 
+import { userSignUp } from "../../services/authService";
+
 const SignupPage = () => {
   const navigate = useNavigate();
   const [form, setForm] = useState({
@@ -62,8 +64,11 @@ const SignupPage = () => {
     setIsLoading(true);
     try {
       // API 호출 로직
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // 임시 딜레이
-
+      const userInfo = await userSignUp({
+        id: form.email,
+        password: form.password,
+      });
+      console.log(userInfo);
       // 회원가입 성공 시 로그인 페이지로 이동
       navigate("/login");
     } catch (error) {

@@ -65,7 +65,9 @@ const HomePage = () => {
             </ExamCard>
           ))
         )}
-        <RecentExamButton>더보기</RecentExamButton>
+        {(recentExams || recentExams.length > 0) && (
+          <RecentExamButton>더보기</RecentExamButton>
+        )}
       </RecentExamsGrid>
     </Container>
   );

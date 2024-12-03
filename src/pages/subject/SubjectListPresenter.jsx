@@ -49,6 +49,9 @@ const SubjectListPresenter = ({
   handleSearchInputChange,
   handleClickTitle,
   handleClickSubject,
+  subjects,
+  isLoading,
+  error,
 }) => {
   return (
     <Container>
