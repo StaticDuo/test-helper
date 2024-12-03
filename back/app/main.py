@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from app.db import engine, Base
 from app.routers import subjects_router, exams_router, questions_router, answers_router, user_router
 
