@@ -28,6 +28,7 @@ import DetailedStatsPage from "./pages/statistics/DetailedStatsPage";
 import HomePage from "./pages/HomePage";
 import AddSubjectsPage from "./pages/add/AddSubjectsPage";
 import AddExamsPage from "./pages/add/AddExamsPage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 function Router() {
   return (
@@ -79,6 +80,7 @@ function Router() {
             </Route>
           </Route>
         </Route>
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
   );
