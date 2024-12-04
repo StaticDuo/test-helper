@@ -1,14 +1,15 @@
 from typing import List, Union
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, HTTPException, Depends
+from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from app.schemas.answer_schema import AnswerRequest, AnswerResponse
 from app.db import get_db
 from app.services.answer_service import (
-    create_answer,
-    get_answer,
-    get_answer_by_id,
-    patch_answer_by_id,
-    delete_answer_by_id,
+    create_answer_service,
+    get_answers_service,
+    get_answer_by_id_service,
+    patch_answer_by_id_service,
+    delete_answer_by_id_service,
 )
 
 
@@ -29,9 +30,25 @@ def create_answer_endpoint(answers: Union[AnswerRequest, List[AnswerRequest]], d
     """
     if isinstance(answers, AnswerRequest):
         answers = [answers]
-    
-    new_answers = create_answer(db, answers)
-    return new_answers
+
+    created_answers = create_answer_service(db, answers)
+
+    return JSONResponse(
+        status_code=201,
+        content={
+            "message": f"Answers have been successfully posted.",
+            "data": {
+                "content": [
+                    {
+                        "question_id": answer.question_id,
+                        "answer_text": answer.answer_text,
+                        "is_correct": answer.is_correct,
+                    }
+                    for answer in created_answers
+                ]
+            },
+        },
+    )
 
 
 @router.get("/answers", response_model=List[AnswerResponse])
@@ -45,8 +62,27 @@ def get_answer_endpoint(db: Session = Depends(get_db)):
     Returns:
         List[AnswerResponse]: 정답 정보 리스트
     """
-    answers = get_answer(db)
-    return answers
+    answers = get_answers_service(db)
+
+    if not answers:
+        raise HTTPException(status_code=404, detail="Answer not found")
+
+    return JSONResponse(
+        status_code=200,
+        content={
+            "message": f"Answers have been successfully fetched.",
+            "data": {
+                "content": [
+                    {
+                        "question_id": answer.question_id,
+                        "answer_text": answer.answer_text,
+                        "is_correct": answer.is_correct,
+                    }
+                    for answer in answers
+                ]
+            },
+        },
+    )
 
 
 @router.get("/answers/{answer_id}", response_model=AnswerResponse)
@@ -61,8 +97,24 @@ def get_answer_by_id_endpoint(answer_id: int, db: Session = Depends(get_db)):
     Returns:
         AnswerResponse: 조회된 정답의 정보
     """
-    answer = get_answer_by_id(db, answer_id)
-    return answer
+    answer = get_answer_by_id_service(db, answer_id)
+
+    if not answer:
+        raise HTTPException(status_code=404, detail="Answer not found")
+
+    return JSONResponse(
+        status_code=200,
+        content={
+            "message": f"Answer has been successfully fetched.",
+            "data": {
+                "content": {
+                    "question_id": answer.question_id,
+                    "answer_text": answer.answer_text,
+                    "is_correct": answer.is_correct,
+                }
+            },
+        },
+    )
 
 
 @router.patch("/answers/{answer_id}", response_model=AnswerResponse)
@@ -78,8 +130,24 @@ def patch_answer_by_id_endpoint(answer_id: int, patch_answer: AnswerRequest, db:
     Returns:
         AnswerResponse: 수정된 정답의 정보
     """
-    patch_answer = patch_answer_by_id(db, answer_id, patch_answer)
-    return patch_answer
+    patched_answer = patch_answer_by_id_service(db, answer_id, patch_answer)
+
+    if not patched_answer:
+        raise HTTPException(status_code=404, detail="Answer not found")
+
+    return JSONResponse(
+        status_code=200,
+        content={
+            "message": f"Answer has been successfully patched.",
+            "data": {
+                "content": {
+                    "question_id": patched_answer.question_id,
+                    "answer_text": patched_answer.answer_text,
+                    "is_correct": patched_answer.is_correct,
+                }
+            },
+        },
+    )
 
 
 @router.delete("/answers/{answer_id}", response_model=AnswerResponse)
@@ -94,5 +162,21 @@ def delete_answer_by_id_endpoint(answer_id: int, db: Session = Depends(get_db)):
     Returns:
         AnswerResponse: 삭제된 정답의 정보
     """
-    delete_answer = delete_answer_by_id(db, answer_id)
-    return delete_answer
+    deleted_answer = delete_answer_by_id_service(db, answer_id)
+
+    if not deleted_answer:
+        raise HTTPException(status_code=404, detail="Answer not found")
+
+    return JSONResponse(
+        status_code=200,
+        content={
+            "message": f"Answer has been successfully deleted.",
+            "data": {
+                "content": {
+                    "question_id": deleted_answer.question_id,
+                    "answer_text": deleted_answer.answer_text,
+                    "is_correct": deleted_answer.is_correct,
+                }
+            },
+        },
+    )
