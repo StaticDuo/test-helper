@@ -2,7 +2,6 @@ import styled from "styled-components";
 
 const SubjectListPresenter = ({
   handleSearchInputChange,
-  handleClickTitle,
   handleClickSubject,
   subjects,
   isLoading,
@@ -10,11 +9,6 @@ const SubjectListPresenter = ({
 }) => {
   return (
     <Container>
-      <Header>
-        <Title onClick={handleClickTitle}>Test Helper</Title>
-        <Subtitle>나만의 학습 도우미</Subtitle>
-      </Header>
-
       <SearchWrapper>
         <SearchIconWrapper>🔍</SearchIconWrapper>
         <SearchInput
@@ -46,22 +40,6 @@ const Container = styled.div`
   background-color: #f9fafb;
   min-height: 100vh;
   padding-bottom: 80px;
-`;
-
-const Header = styled.header`
-  margin-bottom: 24px;
-`;
-
-const Title = styled.h1`
-  font-size: 24px;
-  font-weight: bold;
-  color: #1f2937;
-  margin-bottom: 8px;
-`;
-
-const Subtitle = styled.p`
-  color: #6b7280;
-  font-size: 16px;
 `;
 
 const SearchWrapper = styled.div`
