@@ -1,26 +1,18 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { useNav } from "../../hooks/useNav";
 
 const Nav = () => {
+  const { navItems } = useNav();
   return (
     <NavContainer>
       <NavWrapper>
-        {/* <NavItem to="/upload">
-          <IconPlaceholder>↑</IconPlaceholder>
-          <NavText>시험 업로드</NavText>
-        </NavItem> */}
-        <NavItem to="/subjects">
-          <IconPlaceholder>✎</IconPlaceholder>
-          <NavText>시험보기</NavText>
-        </NavItem>
-        {/* <NavItem to="statistics">
-          <IconPlaceholder>📊</IconPlaceholder>
-          <NavText>통계</NavText>
-        </NavItem> */}
-        <NavItem>
-          <IconPlaceholder>≡</IconPlaceholder>
-          <NavText>전체 메뉴</NavText>
-        </NavItem>
+        {navItems.map((item, index) => (
+          <NavItem key={index} to={item.to}>
+            <IconPlaceholder>{item.icon}</IconPlaceholder>
+            <NavText>{item.text}</NavText>
+          </NavItem>
+        ))}
       </NavWrapper>
     </NavContainer>
   );

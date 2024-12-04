@@ -1,12 +1,15 @@
 import { Outlet } from "react-router-dom";
 import Nav from "./Nav";
+import { NavProvider } from "../../context/NavContext";
 
 const Layout = () => {
   return (
-    <div>
-      <Outlet />
-      <Nav />
-    </div>
+    <NavProvider>
+      <div>
+        <Outlet />
+        <Nav />
+      </div>
+    </NavProvider>
   );
 };
 
