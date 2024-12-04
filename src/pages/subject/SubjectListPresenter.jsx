@@ -1,50 +1,5 @@
 import styled from "styled-components";
 
-const subjects = [
-  {
-    id: 1,
-    name: "기사",
-    icon: "📐",
-    bgColor: "#dbeafe",
-    description: "실기 및 이론 시험 대비",
-  },
-  {
-    id: 2,
-    name: "기능사",
-    icon: "🔬",
-    bgColor: "#dcfce7",
-    description: "실기 및 이론 시험 대비",
-  },
-  {
-    id: 3,
-    name: "코딩",
-    icon: "💻",
-    bgColor: "#f3e8ff",
-    description: "프로그래밍 기초와 알고리즘",
-  },
-  {
-    id: 4,
-    name: "영어",
-    icon: "🌎",
-    bgColor: "#fef9c3",
-    description: "회화부터 시험 대비까지",
-  },
-  {
-    id: 5,
-    name: "회계",
-    icon: "📚",
-    bgColor: "#fee2e2",
-    description: "회계원리와 실무",
-  },
-  {
-    id: 6,
-    name: "재무",
-    icon: "🎵",
-    bgColor: "#fce7f3",
-    description: "재무제표와 재무분석",
-  },
-];
-
 const SubjectListPresenter = ({
   handleSearchInputChange,
   handleClickTitle,
@@ -72,11 +27,9 @@ const SubjectListPresenter = ({
       <SubjectGrid>
         {subjects.map((subject) => (
           <SubjectCard
-            onClick={() => handleClickSubject(subject.id)}
-            key={subject.id}
-            bgColor={subject.bgColor}
+            onClick={() => handleClickSubject(subject.subject_id)}
+            key={subject.subject_id}
           >
-            <IconWrapper>{subject.icon}</IconWrapper>
             <SubjectName>{subject.name}</SubjectName>
             <SubjectDescription>{subject.description}</SubjectDescription>
           </SubjectCard>
@@ -141,14 +94,14 @@ const SearchIconWrapper = styled.div`
 
 const SubjectGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 16px;
-  margin-bottom: 32px;
+  grid-template-columns: repeat(auto-fill); //, minmax(140px, 2fr)
+  gap: 8px;
+  margin-bottom: 16px;
 `;
 
 const SubjectCard = styled.div`
   background-color: ${(props) => props.bgColor || "#fff"};
-  padding: 20px;
+  padding: 12px;
   border-radius: 12px;
   display: flex;
   flex-direction: column;

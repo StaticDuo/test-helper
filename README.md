@@ -18,16 +18,19 @@ src/
 │ │ ├── LoginPage.jsx
 │ │ └── SignupPage.jsx
 │ ├── subject/
-│ │ ├── SubjectListPage.jsx # 메인 화면 (과목 목록)
-│ │ └── SubjectDetailPage.jsx # 특정 과목의 시험 목록
+│ │ ├── SubjectListPage.jsx # 과목 목록 화면
+│ │ ├── SubjectDetailPage.jsx # 특정 과목의 정보(시험목록, 문제목록 선택)
+│ │ ├── SubjectExamPage.jsx # 특정 과목의 시험 목록
+│ │ └── SubjectQuestionPage.jsx # 특정 과목의 문제 목록
 │ ├── exam/
 │ │ ├── ExamListPage.jsx # 시험 목록
 │ │ ├── ExamUploadPage.jsx # 시험 업로드
 │ │ ├── ExamTakingPage.jsx # 시험 보기
 │ │ └── ExamDetailPage.jsx # 시험 상세
-│ └── statistics/
+│ ├── statistics/
 │ │ ├── StatisticsPage.jsx # 통계 메인
 │ │ └── DetailedStatsPage.jsx # 상세 통계
+| └──Home.jsx # 홈 화면(최근 본 시험 목록)
 ├── hooks/ # 커스텀 훅
 ├── services/ # API 통신 로직
 │ ├── authService.js

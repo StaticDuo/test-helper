@@ -8,7 +8,6 @@ const LoginPresenter = ({
   handleChange,
   handleSubmit,
 }) => {
-  console.log(errors.mail);
   return (
     <Container>
       <LoginContainer>
@@ -17,13 +16,13 @@ const LoginPresenter = ({
           <InputGroup>
             <Label htmlFor="email">이메일</Label>
             <Input
-              id="email"
-              name="email"
+              id="id"
+              name="id"
               type="email"
               placeholder="이메일을 입력하세요"
-              value={values.email}
+              value={values.id}
               onChange={handleChange}
-              hasError={!!errors.email}
+              hasError={!!errors.id}
             />
             {errors.email && <ErrorMessage>{errors.email}</ErrorMessage>}
           </InputGroup>
@@ -43,7 +42,7 @@ const LoginPresenter = ({
           {errors.submit && <ErrorMessage>{errors.submit}</ErrorMessage>}
           <LoginButton
             type="submit"
-            disabled={isLoading || !values.email || !values.password}
+            disabled={isLoading || !values.id || !values.password}
           >
             {isLoading ? "로그인 중..." : "로그인"}
           </LoginButton>
