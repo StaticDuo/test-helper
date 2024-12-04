@@ -28,6 +28,7 @@ const Title = styled.h1`
   font-weight: bold;
   color: #1f2937;
   margin-bottom: 8px;
+  cursor: pointer;
 `;
 
 const Subtitle = styled.p`

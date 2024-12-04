@@ -17,7 +17,7 @@ const SubjectListPage = () => {
   const { updateNavItems } = useNav();
   useEffect(() => {
     const navItems = [
-      { to: "/subjects/add", icon: "✚", text: "과목추가" },
+      { to: "add/subjects", icon: "✚", text: "과목추가" },
       { icon: "≡", text: "전체 메뉴" },
     ];
 
@@ -30,12 +30,8 @@ const SubjectListPage = () => {
     return () => updateNavItems(defaultItems);
   }, [updateNavItems]);
 
-  const handleSubjectClick = (subjectId) => {
+  const handleClickSubject = (subjectId) => {
     navigate(`/subjects/${subjectId}`);
-  };
-
-  const handleClickTitle = () => {
-    navigate("/");
   };
 
   const handleSearchInputChange = (e) => {
@@ -64,8 +60,7 @@ const SubjectListPage = () => {
   return (
     <SubjectListPresenter
       handleSearchInputChange={handleSearchInputChange}
-      handleClickTitle={handleClickTitle}
-      handleClickSubject={handleSubjectClick}
+      handleClickSubject={handleClickSubject}
       subjects={subjects}
       isLoading={isLoading}
       error={error}

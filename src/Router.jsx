@@ -26,6 +26,8 @@ import DetailedStatsPage from "./pages/statistics/DetailedStatsPage";
 
 // Home page
 import HomePage from "./pages/HomePage";
+import AddSubjectsPage from "./pages/add/AddSubjectsPage";
+import AddExamsPage from "./pages/add/AddExamsPage";
 
 function Router() {
   return (
@@ -68,6 +70,12 @@ function Router() {
             <Route path="statistics">
               <Route index element={<StatisticsPage />} />
               <Route path="detailed" element={<DetailedStatsPage />} />
+            </Route>
+
+            {/* add */}
+            <Route path="add">
+              <Route path="subjects" element={<AddSubjectsPage />} />
+              <Route path=":subjectId/exams" element={<AddExamsPage />} />
             </Route>
           </Route>
         </Route>
