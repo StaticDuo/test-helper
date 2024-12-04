@@ -16,17 +16,18 @@ const SubjectListPage = () => {
   // 탭바 내용 변경
   const { updateNavItems } = useNav();
   useEffect(() => {
-    updateNavItems([
+    const navItems = [
       { to: "/subjects/add", icon: "✚", text: "과목추가" },
       { icon: "≡", text: "전체 메뉴" },
-    ]);
+    ];
 
-    return () => {
-      updateNavItems([
-        { to: "/subjects", icon: "✎", text: "시험보기" },
-        { icon: "≡", text: "전체 메뉴" },
-      ]);
-    };
+    const defaultItems = [
+      { to: "/subjects", icon: "✎", text: "시험보기" },
+      { icon: "≡", text: "전체 메뉴" },
+    ];
+
+    updateNavItems(navItems);
+    return () => updateNavItems(defaultItems);
   }, [updateNavItems]);
 
   const handleSubjectClick = (subjectId) => {

@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useCallback, useState } from "react";
 
 const NavContext = createContext();
 
@@ -8,9 +8,9 @@ export const NavProvider = ({ children }) => {
     { icon: "≡", text: "전체 메뉴" },
   ]);
 
-  const updateNavItems = (newItems) => {
+  const updateNavItems = useCallback((newItems) => {
     setNavItems(newItems);
-  };
+  }, []);
 
   return (
     <NavContext.Provider value={{ navItems, updateNavItems }}>
