@@ -1,3 +1,4 @@
+from typing import Optional
 from sqlalchemy.orm import Session, joinedload
 from app.models.subject import Subject
 from app.models.exam import Exam
@@ -17,8 +18,13 @@ def create_subject(db: Session, subject_data: SubjectRequest) -> Subject:
 
 
 # Subject 조회 함수
-def get_subject(db: Session) -> Subject:
-    return db.query(Subject).all()
+def get_subject(db: Session, name: Optional[str] = None) -> Subject:
+    query = db.query(Subject)
+
+    if name:
+        query = query.filter(Subject.name.ilike(f"%{name}%"))
+        
+    return query.all()
 
 
 # 단일 Subject 조회 함수

@@ -1,5 +1,5 @@
-from typing import List
-from fastapi import APIRouter, Depends
+from typing import List, Optional
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 from app.schemas.subject_schema import SubjectRequest, SubjectResponse
 from app.schemas.exam_schema import ExamResponse
@@ -35,17 +35,20 @@ def create_subject_endpoint(subject: SubjectRequest, db: Session = Depends(get_d
 
 
 @router.get("/subjects", response_model=List[SubjectResponse])
-def get_subject_endpoint(db: Session = Depends(get_db)):
+def get_subject_endpoint(
+    db: Session = Depends(get_db), 
+    name: Optional[str] = Query(None)):
     """
     모든 과목 정보를 가져오는 엔드포인트
 
     Args:
         db (Session): SQLAlchemy 데이터베이스 세션 객체
+        name (Optional[str]): 과목 이름 일부를 검색하기 위한 쿼리 파라미터
 
     Returns:
         List[SubjectResponse]: 과목 정보 리스트
     """
-    subjects = get_subject(db)
+    subjects = get_subject(db, name)
     return subjects
 
 
