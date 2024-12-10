@@ -26,8 +26,26 @@ def get_exam_by_id(db: Session, exam_id: int) -> Exam:
 
 # Exam에 속한 Questions 조회 함수
 def get_questions_by_exam(db: Session, exam_id: int) -> Question:
-    exam = db.query(Exam).options(joinedload(Exam.questions)).filter(Exam.exam_id == exam_id).first()
-    return exam.questions
+    exam = db.query(Exam).options(joinedload(Exam.questions).joinedload(Question.answers)).filter(Exam.exam_id == exam_id).first()
+
+    questions = [
+        {
+            "question_id": question.question_id,
+            "question_number": question.question_number,
+            "question_text": question.question_text,
+            "question_type": question.question_type,
+            "answers": [
+                {
+                    "answer_id": answer.answer_id, 
+                    "answer_text": answer.answer_text, 
+                    "is_correct": answer.is_correct
+                } for answer in question.answers
+            ],
+        }
+        for question in exam.questions
+    ]
+
+    return questions
 
 
 # Exam 수정 함수

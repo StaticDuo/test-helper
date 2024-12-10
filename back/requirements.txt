@@ -9,3 +9,4 @@ pymysql
 python-jose
 passlib
 bcrypt
+pydantic-settings

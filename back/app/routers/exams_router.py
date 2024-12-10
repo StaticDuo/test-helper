@@ -64,7 +64,7 @@ def get_exam_by_id_endpoint(exam_id: int, db: Session = Depends(get_db)):
     return exam
 
 
-@router.get("/exams/{exam_id}/questions", response_model=List[QuestionResponse])
+@router.get("/exams/{exam_id}/questions")
 def get_questions_by_exam_endpoint(exam_id: int, db: Session = Depends(get_db)):
     """
     특정 ID에 해당하는 시험에 포함된 문제 정보를 조회하는 엔드포인트
