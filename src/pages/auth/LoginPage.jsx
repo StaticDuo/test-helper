@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LoginPresenter from "./LoginPresenter";
-
-import { userLogin } from "../../services/authService";
+import { useAuth } from "../../hooks/useAuth";
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const { login } = useAuth(); // context의 login 함수
   const [values, setValues] = useState({
     id: "",
     password: "",
@@ -27,11 +27,6 @@ const LoginPage = () => {
 
   const validateForm = () => {
     const newErrors = {};
-    // if (!values.id) {
-    //   newErrors.id = "이메일을 입력해주세요";
-    // } else if (!/\S+@\S+\.\S+/.test(values.email)) {
-    //   newErrors.id = "올바른 이메일 형식이 아닙니다";
-    // }
     if (!values.password) {
       newErrors.password = "비밀번호를 입력해주세요";
     }
@@ -45,12 +40,7 @@ const LoginPage = () => {
 
     setIsLoading(true);
     try {
-      console.log("values", values);
-      const response = await userLogin(values);
-      console.log(response);
-
-      localStorage.setItem("accessToken", response.access_token);
-      localStorage.setItem("refreshToken", response.refresh_token);
+      await login(values.id, values.password);
       navigate("/");
     } catch (error) {
       console.error(error);

@@ -35,35 +35,37 @@ const HomePage = () => {
         <SearchInput placeholder="학습하고 싶은 과목을 검색하세요" />
       </SearchWrapper>
 
-      <SectionTitle>최근 본 시험</SectionTitle>
-      <RecentExamsGrid>
-        {!recentExams || recentExams.length === 0 ? (
-          <div>최근 본 시험이 없습니다.</div>
-        ) : (
-          recentExams.map((exam) => (
-            <ExamCard key={exam.id}>
-              <ExamHeader>
-                <ExamTitle>{exam.title}</ExamTitle>
-                <ExamDate>{exam.date}</ExamDate>
-              </ExamHeader>
-              <SubjectDescription>{exam.subject}</SubjectDescription>
-              <ExamInfo>
-                <ExamInfoItem>
-                  <span>⏱️</span>
-                  {exam.duration}
-                </ExamInfoItem>
-                <ExamInfoItem>
-                  <span>📊</span>
-                  점수: {exam.score}점
-                </ExamInfoItem>
-              </ExamInfo>
-            </ExamCard>
-          ))
-        )}
-        {(recentExams || recentExams.length > 0) && (
-          <RecentExamButton>더보기</RecentExamButton>
-        )}
-      </RecentExamsGrid>
+      <RecentExamContainer>
+        <SectionTitle>최근 본 시험</SectionTitle>
+        <RecentExamsGrid>
+          {!recentExams || recentExams.length === 0 ? (
+            <div>최근 본 시험이 없습니다.</div>
+          ) : (
+            recentExams.map((exam) => (
+              <ExamCard key={exam.id}>
+                <ExamHeader>
+                  <ExamTitle>{exam.title}</ExamTitle>
+                  <ExamDate>{exam.date}</ExamDate>
+                </ExamHeader>
+                <SubjectDescription>{exam.subject}</SubjectDescription>
+                <ExamInfo>
+                  <ExamInfoItem>
+                    <span>⏱️</span>
+                    {exam.duration}
+                  </ExamInfoItem>
+                  <ExamInfoItem>
+                    <span>📊</span>
+                    점수: {exam.score}점
+                  </ExamInfoItem>
+                </ExamInfo>
+              </ExamCard>
+            ))
+          )}
+          {(recentExams || recentExams.length > 0) && (
+            <RecentExamButton>더보기</RecentExamButton>
+          )}
+        </RecentExamsGrid>
+      </RecentExamContainer>
     </Container>
   );
 };
@@ -73,8 +75,9 @@ export default HomePage;
 const Container = styled.div`
   padding: 20px;
   background-color: #f9fafb;
-  min-height: 100vh;
-  padding-bottom: 80px;
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
 `;
 
 const SearchWrapper = styled.div`
@@ -153,10 +156,16 @@ const RecentExamButton = styled.button`
   }
 `;
 
+const RecentExamContainer = styled.div`
+  flex: 1;
+  overflow-y: auto;
+`;
+
 const RecentExamsGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 16px;
+  overflow-y: auto;
 `;
 
 const ExamCard = styled.div`

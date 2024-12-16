@@ -62,7 +62,7 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #f8f9fa;
+  /* background-color: #f8f9fa; */
   padding: 0 16px;
 `;
 
