@@ -6,10 +6,14 @@ import { useNavigate } from "react-router-dom";
 import { useNav } from "../../hooks/useNav";
 import { useEffect, useState } from "react";
 
-import { getSubject } from "../../services/subjectService";
+import { createSubjectService } from "../../services/subjectService";
+import { useAuth } from "../../hooks/useAuth";
 
 const SubjectDetailPage = () => {
   const [subject, setSubject] = useState([]);
+
+  const { authAxios } = useAuth();
+  const subjectService = createSubjectService(authAxios);
 
   const { subjectId } = useParams();
   const navigate = useNavigate();
@@ -35,7 +39,7 @@ const SubjectDetailPage = () => {
   useEffect(() => {
     const fetchSubject = async () => {
       try {
-        const res = await getSubject(subjectId);
+        const res = await subjectService.getSubject(subjectId);
         setSubject(res);
       } catch (error) {
         console.error(error);

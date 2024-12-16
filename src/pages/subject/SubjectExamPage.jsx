@@ -1,9 +1,10 @@
 import { useNavigate, useParams } from "react-router-dom";
 import SubjectExamPresenter from "./SubjectExamPresenter";
 
-import { getExamsBySubject, getSubject } from "../../services/subjectService";
+import { createSubjectService } from "../../services/subjectService";
 import { useEffect, useState } from "react";
 import { useNav } from "../../hooks/useNav";
+import { useAuth } from "../../hooks/useAuth";
 
 const SubjectExamPage = () => {
   const [exams, setExams] = useState([]);
@@ -11,6 +12,9 @@ const SubjectExamPage = () => {
 
   const navigate = useNavigate();
   const { subjectId } = useParams();
+
+  const { authAxios } = useAuth();
+  const subjectService = createSubjectService(authAxios);
 
   // 탭바 내용 변경
   const { updateNavItems } = useNav();
@@ -33,10 +37,12 @@ const SubjectExamPage = () => {
   useEffect(() => {
     const fetchExams = async () => {
       try {
-        const exams = await getExamsBySubject(subjectId);
-        setExams(exams);
-        const subject = await getSubject(subjectId);
-        setSubject(subject);
+        const exams = await subjectService.getExamsBySubject(subjectId);
+        setExams(exams.data.content);
+        console.log(exams.data.content);
+        const subject = await subjectService.getSubject(subjectId);
+        setSubject(subject.data.content);
+        console.log(subject.data.content);
       } catch (error) {
         console.error(error);
       }

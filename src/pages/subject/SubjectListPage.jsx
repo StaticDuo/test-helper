@@ -4,10 +4,13 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import { useNav } from "../../hooks/useNav";
-import { getAllSubjects } from "../../services/subjectService";
+import { useAuth } from "../../hooks/useAuth";
+import { createSubjectService } from "../../services/subjectService";
 
 const SubjectListPage = () => {
   const navigate = useNavigate();
+  const { authAxios } = useAuth();
+  const subjectService = createSubjectService(authAxios);
 
   const [subjects, setSubjects] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -46,8 +49,8 @@ const SubjectListPage = () => {
     const fetchSubjects = async () => {
       setIsLoading(true);
       try {
-        const response = await getAllSubjects();
-        setSubjects(response);
+        const response = await subjectService.getAllSubjects();
+        setSubjects(response.data.content);
       } catch (error) {
         setError(error);
       } finally {
