@@ -1,18 +1,19 @@
 from typing import List, Optional
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, HTTPException, Depends, Query
+from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from app.schemas.subject_schema import SubjectRequest, SubjectResponse
 from app.schemas.exam_schema import ExamResponse
 from app.schemas.question_schema import QuestionResponse
 from app.db import get_db
 from app.services.subject_service import (
-    create_subject,
-    get_subject,
-    get_subject_by_id,
-    get_exams_by_subject,
-    get_questions_by_subject,
-    patch_subject_by_id,
-    delete_subject_by_id,
+    create_subject_service,
+    get_subjects_service,
+    get_subject_by_id_service,
+    get_exams_by_subject_service,
+    get_questions_by_subject_service,
+    patch_subject_by_id_service,
+    delete_subject_by_id_service,
 )
 
 router = APIRouter()
@@ -30,16 +31,14 @@ def create_subject_endpoint(subject: SubjectRequest, db: Session = Depends(get_d
     Returns:
         SubjectResponse: 생성된 과목의 정보
     """
-    new_subject = create_subject(db, subject)
+    new_subject = create_subject_service(db, subject)
     return new_subject
 
 
 @router.get("/subjects", response_model=List[SubjectResponse])
-def get_subject_endpoint(
-    db: Session = Depends(get_db), 
-    name: Optional[str] = Query(None)):
+def get_subject_endpoint(db: Session = Depends(get_db), name: Optional[str] = Query(None)):
     """
-    모든 과목 정보를 가져오는 엔드포인트
+    검색 조건에 맞는 과목 정보를 가져오는 엔드포인트
 
     Args:
         db (Session): SQLAlchemy 데이터베이스 세션 객체
@@ -48,8 +47,27 @@ def get_subject_endpoint(
     Returns:
         List[SubjectResponse]: 과목 정보 리스트
     """
-    subjects = get_subject(db, name)
-    return subjects
+    subjects = get_subjects_service(db, name)
+
+    if not subjects:
+        raise HTTPException(status_code=404, detail="Subject not found")
+
+    return JSONResponse(
+        status_code=200,
+        content={
+            "message": f"Subjects have been successfully fetched.",
+            "data": {
+                "content": [
+                    {
+                        "subject_id": subject.subject_id,
+                        "name": subject.name,
+                        "description": subject.description,
+                    }
+                    for subject in subjects
+                ]
+            },
+        },
+    )
 
 
 @router.get("/subjects/{subject_id}", response_model=SubjectResponse)
@@ -64,8 +82,24 @@ def get_subject_by_id_endpoint(subject_id: int, db: Session = Depends(get_db)):
     Returns:
         SubjectResponse: 조회된 과목의 정보
     """
-    subject = get_subject_by_id(db, subject_id)
-    return subject
+    subject = get_subject_by_id_service(db, subject_id)
+
+    if not subject:
+        raise HTTPException(status_code=404, detail="Subject not found")
+
+    return JSONResponse(
+        status_code=200,
+        content={
+            "message": f"Subject has been successfully fetched.",
+            "data": {
+                "content": {
+                    "subject_id": subject.subject_id,
+                    "name": subject.name,
+                    "description": subject.description,
+                }
+            },
+        },
+    )
 
 
 @router.get("/subjects/{subject_id}/exams", response_model=List[ExamResponse])
@@ -80,12 +114,29 @@ def get_exams_by_subject_endpoint(subject_id: int, db: Session = Depends(get_db)
     Returns:
         List[ExamResponse]: 조건에 해당하는 시험 정보 리스트
     """
-    exams = get_exams_by_subject(db, subject_id)
-    return exams
+    exams = get_exams_by_subject_service(db, subject_id)
+    if not exams:
+        raise HTTPException(status_code=404, detail="Exams not found")
+
+    return JSONResponse(
+        status_code=200,
+        content={
+            "message": f"Subjects have been successfully fetched.",
+            "data": {
+                "content": [
+                    {
+                        "exam_id": exam.exam_id,
+                        "name": exam.name,
+                    }
+                    for exam in exams
+                ]
+            },
+        },
+    )
 
 
 @router.get("/subjects/{subject_id}/questions", response_model=List[QuestionResponse])
-def get_questions_by_subject_endpoint(subject_id: int, limit: int, randomize: bool, db: Session = Depends(get_db)):
+def get_questions_by_subject_endpoint(subject_id: int, limit: Optional[int] = 10, randomize: Optional[bool] = True, db: Session = Depends(get_db)):
     """
     특정 ID에 해당하는 과목에 포함된 문제 정보를 조회하는 엔드포인트
 
@@ -95,11 +146,39 @@ def get_questions_by_subject_endpoint(subject_id: int, limit: int, randomize: bo
         randomize (bool): 랜덤 여부
         db (Session): SQLAlchemy 데이터베이스 세션 객체
     Returns:
-        List[ExamResponse]: 조건에 해당하는 시험 정보 리스트
+        List[QuestionResponse]: 조건에 해당하는 문제 정보 리스트
 
     """
-    questions = get_questions_by_subject(db, subject_id, limit, randomize)
-    return questions
+    questions = get_questions_by_subject_service(db, subject_id, limit, randomize)
+    if not questions:
+        raise HTTPException(status_code=404, detail="Questions not found")
+
+    return JSONResponse(
+        status_code=200,
+        content={
+            "message": f"Subjects have been successfully fetched.",
+            "data": {
+                "content": [
+                    {
+                        "question_id": question.question_id,
+                        "exam_id": question.exam_id,
+                        "question_number": question.question_number,
+                        "question_text": question.question_text,
+                        "question_type": question.question_type,
+                        "answers": [
+                            {
+                                "answer_id": answer.answer_id,
+                                "question_id": answer.question_id,
+                                "answer_text": answer.answer_text,
+                            }
+                            for answer in question.answers
+                        ],
+                    }
+                    for question in questions
+                ]
+            },
+        },
+    )
 
 
 @router.patch("/subjects/{subject_id}", response_model=SubjectResponse)
@@ -115,8 +194,24 @@ def patch_subject_by_id_endpoint(subject_id: int, patch_subject: SubjectRequest,
     Returns:
         SubjectResponse: 수정된 과목의 정보
     """
-    patch_subject = patch_subject_by_id(db, subject_id, patch_subject)
-    return patch_subject
+    patched_subject = patch_subject_by_id_service(db, subject_id, patch_subject)
+
+    if not patched_subject:
+        raise HTTPException(status_code=404, detail="Subject not found")
+
+    return JSONResponse(
+        status_code=200,
+        content={
+            "message": f"Subject has been successfully patched.",
+            "data": {
+                "content": {
+                    "subject_id": patched_subject.subject_id,
+                    "name": patched_subject.name,
+                    "description": patched_subject.description,
+                }
+            },
+        },
+    )
 
 
 @router.delete("/subjects/{subject_id}", response_model=SubjectResponse)
@@ -131,5 +226,21 @@ def delete_subject_by_id_endpoint(subject_id: int, db: Session = Depends(get_db)
     Returns:
         SubjectResponse: 삭제된 과목의 정보
     """
-    delete_subject = delete_subject_by_id(db, subject_id)
-    return delete_subject
+    deleted_subject = delete_subject_by_id_service(db, subject_id)
+
+    if not deleted_subject:
+        raise HTTPException(status_code=404, detail="Subject not found")
+
+    return JSONResponse(
+        status_code=200,
+        content={
+            "message": f"Subject has been successfully deleted.",
+            "data": {
+                "content": {
+                    "subject_id": deleted_subject.subject_id,
+                    "name": deleted_subject.name,
+                    "description": deleted_subject.description,
+                }
+            },
+        },
+    )
