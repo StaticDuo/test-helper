@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Layout from "./components/common/Layout";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import PublicRoute from "./components/auth/PublicRoute";
@@ -29,10 +29,11 @@ import HomePage from "./pages/HomePage";
 import AddSubjectsPage from "./pages/add/AddSubjectsPage";
 import AddExamsPage from "./pages/add/AddExamsPage";
 import NotFoundPage from "./pages/NotFoundPage";
+import { AuthProvider } from "./context/AuthContext";
 
 function Router() {
   return (
-    <BrowserRouter>
+    <AuthProvider>
       <Routes>
         {/* Public Routes */}
         <Route element={<PublicRoute />}>
@@ -67,6 +68,11 @@ function Router() {
               </Route>
             </Route>
 
+            {/* Questions */}
+            <Route path="questions">
+              <Route index element={<>문제들</>} />
+            </Route>
+
             {/* Statistics */}
             <Route path="statistics">
               <Route index element={<StatisticsPage />} />
@@ -82,7 +88,7 @@ function Router() {
         </Route>
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
-    </BrowserRouter>
+    </AuthProvider>
   );
 }
 
