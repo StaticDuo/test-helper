@@ -17,20 +17,17 @@ router = APIRouter()
 
 
 @router.post("/questions", response_model=QuestionResponse)
-def create_question_endpoint(questions: QuestionRequest, db: Session = Depends(get_db)):
+def create_question_endpoint(questions: List[QuestionRequest], db: Session = Depends(get_db)):
     """
     새로운 문제 정보를 생성하는 엔드포인트
 
     Args:
-        question (QuestionRequest): 생성할 문제의 요청 데이터
+        question (List[QuestionRequest]): 생성할 문제의 요청 데이터 리스트
         db (Session): SQLAlchemy 데이터베이스 세션 객체
 
     Returns:
         QuestionResponse: 생성된 문제의 정보
     """
-    if isinstance(questions, QuestionRequest):
-        questions = [questions]
-
     created_questions = create_question_service(db, questions)
 
     return JSONResponse(
@@ -107,7 +104,7 @@ def get_question_by_id_endpoint(question_id: int, db: Session = Depends(get_db))
     return JSONResponse(
         status_code=200,
         content={
-            "message": f"Question have been successfully fetched.",
+            "message": f"Question has been successfully fetched.",
             "data": {
                 "content": {
                     "exam_id": question.exam_id,
