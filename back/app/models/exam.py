@@ -12,3 +12,4 @@ class Exam(Base):
 
     subject = relationship("Subject", back_populates="exams")
     questions = relationship("Question", back_populates="exam")
+    user_exams = relationship("UserExam", back_populates="exam")
