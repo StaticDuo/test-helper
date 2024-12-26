@@ -20,19 +20,35 @@ router = APIRouter()
 
 
 @router.post("/subjects", response_model=SubjectResponse)
-def create_subject_endpoint(subject: SubjectRequest, db: Session = Depends(get_db)):
+def create_subject_endpoint(subjects: List[SubjectRequest], db: Session = Depends(get_db)):
     """
     새로운 과목 정보를 생성하는 엔드포인트
 
     Args:
-        subject (SubjectRequest): 생성할 과목의 요청 데이터
+        subjects (List[SubjectRequest]): 생성할 과목의 요청 데이터 리스트
         db (Session): SQLAlchemy 데이터베이스 세션 객체
 
     Returns:
         SubjectResponse: 생성된 과목의 정보
     """
-    new_subject = create_subject_service(db, subject)
-    return new_subject
+    created_subjects = create_subject_service(db, subjects)
+
+    return JSONResponse(
+        status_code=201,
+        content={
+            "message": f"Subjects have been successfully posted.",
+            "data": {
+                "content": [
+                    {
+                        "subject_id": subject.subject_id,
+                        "name": subject.name,
+                        "description": subject.description,
+                    }
+                    for subject in created_subjects
+                ]
+            },
+        },
+    )
 
 
 @router.get("/subjects", response_model=List[SubjectResponse])
@@ -156,7 +172,7 @@ def get_questions_by_subject_endpoint(subject_id: int, limit: Optional[int] = 10
     return JSONResponse(
         status_code=200,
         content={
-            "message": f"Subjects have been successfully fetched.",
+            "message": f"Questions have been successfully fetched.",
             "data": {
                 "content": [
                     {
