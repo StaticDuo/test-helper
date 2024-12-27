@@ -67,9 +67,9 @@ export const AuthProvider = ({ children }) => {
   );
 
   // login 함수
-  const login = async (id, password) => {
+  const login = async (email, password) => {
     try {
-      const res = await authAxios.post("/login", { id, password });
+      const res = await authAxios.post("/login", { email, password });
 
       const { access_token, refresh_token } = res.data;
 

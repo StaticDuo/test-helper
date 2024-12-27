@@ -4,15 +4,35 @@ import { useNav } from "../../hooks/useNav";
 
 const Nav = () => {
   const { navItems } = useNav();
+
+  const handleClick = (e, item) => {
+    if (!item.to) {
+      // to prop이 없는 경우
+      e.preventDefault();
+      if (item.action) {
+        item.action();
+      }
+    }
+  };
+
   return (
     <NavContainer>
       <NavWrapper>
-        {navItems.map((item, index) => (
-          <NavItem key={index} to={item.to}>
-            <IconPlaceholder>{item.icon}</IconPlaceholder>
-            <NavText>{item.text}</NavText>
-          </NavItem>
-        ))}
+        {navItems.map((item, index) => {
+          const BaseComponent = item.to ? Link : "button";
+          return (
+            <NavItem
+              key={index}
+              as={BaseComponent}
+              to={item.to}
+              onClick={(e) => handleClick(e, item)}
+              disabled={item.disabled}
+            >
+              <IconPlaceholder>{item.icon}</IconPlaceholder>
+              <NavText>{item.text}</NavText>
+            </NavItem>
+          );
+        })}
       </NavWrapper>
     </NavContainer>
   );
@@ -37,16 +57,24 @@ const NavWrapper = styled.div`
   margin: 0 auto;
 `;
 
-const NavItem = styled(Link)`
+const NavItem = styled.button`
   display: flex;
   flex-direction: column;
   align-items: center;
   flex: 1;
   padding: 4px 0;
   text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
 
   &:active {
     opacity: 0.7;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 `;
 

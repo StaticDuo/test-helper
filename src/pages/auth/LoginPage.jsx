@@ -7,7 +7,7 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const { login } = useAuth(); // context의 login 함수
   const [values, setValues] = useState({
-    id: "",
+    email: "",
     password: "",
   });
   const [errors, setErrors] = useState({});
@@ -27,6 +27,11 @@ const LoginPage = () => {
 
   const validateForm = () => {
     const newErrors = {};
+    if (!values.email) {
+      newErrors.email = "이메일을 입력해주세요";
+    } else if (!/\S+@\S+\.\S+/.test(values.email)) {
+      newErrors.email = "올바른 이메일 형식이 아닙니다";
+    }
     if (!values.password) {
       newErrors.password = "비밀번호를 입력해주세요";
     }
@@ -40,7 +45,7 @@ const LoginPage = () => {
 
     setIsLoading(true);
     try {
-      await login(values.id, values.password);
+      await login(values.email, values.password);
       navigate("/");
     } catch (error) {
       console.error(error);

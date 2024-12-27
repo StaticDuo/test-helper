@@ -28,4 +28,9 @@ export const createExamService = (authAxios) => ({
     const response = await authAxios.get(`exams/${examId}/questions`);
     return response.data;
   },
+
+  getRecentExams: async (userId) => {
+    const res = await authAxios.get(`users/${userId}/exams`);
+    return res.data;
+  },
 });

@@ -11,6 +11,8 @@ import PasswordResetPage from "./pages/auth/PasswordResetPage";
 // Subject pages
 import SubjectListPage from "./pages/subject/SubjectListPage";
 import SubjectDetailPage from "./pages/subject/SubjectDetailPage";
+import SubjectExamStartPage from "./pages/subject/SubjectExamStartPage";
+import SubjectQuestionStartPage from "./pages/subject/SubjectQuestionStartPage";
 import SubjectExamPage from "./pages/subject/SubjectExamPage";
 import SubjectQuestionPage from "./pages/subject/SubjectQuestionPage";
 
@@ -53,8 +55,13 @@ function Router() {
               <Route index element={<SubjectListPage />} />
               <Route path=":subjectId">
                 <Route index element={<SubjectDetailPage />} />
-                <Route path="exams" element={<SubjectExamPage />} />
-                <Route path="questions" element={<SubjectQuestionPage />} />
+                <Route path="exam-start" element={<SubjectExamStartPage />} />
+                <Route path="exam" element={<SubjectExamPage />} />
+                <Route
+                  path="question-start"
+                  element={<SubjectQuestionStartPage />}
+                />
+                <Route path="question" element={<SubjectQuestionPage />} />
               </Route>
             </Route>
 

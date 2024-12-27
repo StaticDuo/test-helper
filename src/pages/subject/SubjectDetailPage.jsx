@@ -1,6 +1,6 @@
 import SubjectDetailPresenter from "./SubjectDetailPresenter";
 
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 import { useNav } from "../../hooks/useNav";
@@ -17,6 +17,9 @@ const SubjectDetailPage = () => {
 
   const { subjectId } = useParams();
   const navigate = useNavigate();
+
+  const location = useLocation();
+  const { subjectName } = location.state || {};
 
   // 탭바 내용 변경
   const { updateNavItems } = useNav();
@@ -49,10 +52,12 @@ const SubjectDetailPage = () => {
   }, [subjectId]);
 
   const handleClickExam = () => {
-    navigate(`/subjects/${subjectId}/exams`);
+    navigate(`/subjects/${subjectId}/exam-start`, { state: { subjectName } });
   };
   const handleClickQuestion = () => {
-    navigate(`/subjects/${subjectId}/questions`);
+    navigate(`/subjects/${subjectId}/question-start`, {
+      state: { subjectName },
+    });
   };
 
   return (

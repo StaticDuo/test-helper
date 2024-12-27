@@ -25,10 +25,11 @@ const LayoutContainer = styled.div`
   height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 `;
 
 const MainContent = styled.main`
   flex: 1;
-  overflow-y: auto;
-  padding-bottom: 80px;
+  padding-bottom: 70px;
+  overflow: hidden;
 `;

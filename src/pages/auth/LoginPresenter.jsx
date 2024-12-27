@@ -16,13 +16,13 @@ const LoginPresenter = ({
           <InputGroup>
             <Label htmlFor="email">이메일</Label>
             <Input
-              id="id"
-              name="id"
+              id="email"
+              name="email"
               type="email"
               placeholder="이메일을 입력하세요"
-              value={values.id}
+              value={values.email}
               onChange={handleChange}
-              hasError={!!errors.id}
+              $hasError={!!errors.email}
             />
             {errors.email && <ErrorMessage>{errors.email}</ErrorMessage>}
           </InputGroup>
@@ -35,14 +35,14 @@ const LoginPresenter = ({
               placeholder="비밀번호를 입력하세요"
               value={values.password}
               onChange={handleChange}
-              hasError={!!errors.password}
+              $hasError={!!errors.password}
             />
             {errors.password && <ErrorMessage>{errors.password}</ErrorMessage>}
           </InputGroup>
           {errors.submit && <ErrorMessage>{errors.submit}</ErrorMessage>}
           <LoginButton
             type="submit"
-            disabled={isLoading || !values.id || !values.password}
+            disabled={isLoading || !values.email || !values.password}
           >
             {isLoading ? "로그인 중..." : "로그인"}
           </LoginButton>

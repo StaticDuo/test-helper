@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const SubjectExamPresenter = ({ exams, subject, handleClickExam }) => {
+const SubjectExamStartPresenter = ({ exams, subject, handleClickExam }) => {
   return (
     <Container>
       <Title>{subject.name} 시험 목록</Title>
@@ -20,7 +20,7 @@ const SubjectExamPresenter = ({ exams, subject, handleClickExam }) => {
   );
 };
 
-export default SubjectExamPresenter;
+export default SubjectExamStartPresenter;
 
 const Container = styled.div`
   padding: 20px;

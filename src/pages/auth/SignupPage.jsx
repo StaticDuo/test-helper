@@ -65,7 +65,7 @@ const SignupPage = () => {
     try {
       // API 호출 로직
       const userInfo = await userSignUp({
-        id: form.email,
+        email: form.email,
         password: form.password,
       });
       console.log(userInfo);

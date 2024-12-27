@@ -34,7 +34,17 @@ const SubjectListPage = () => {
   }, [updateNavItems]);
 
   const handleClickSubject = (subjectId) => {
-    navigate(`/subjects/${subjectId}`);
+    const subjectName = subjects.find(
+      (subject) => subject.subject_id === subjectId
+    )?.name;
+    console.log(subjectName);
+
+    if (!subjectName) {
+      console.error("Subject not found");
+      return;
+    }
+
+    navigate(`/subjects/${subjectId}`, { state: { subjectName } });
   };
 
   const handleSearchInputChange = (e) => {
