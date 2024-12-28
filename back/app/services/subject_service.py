@@ -18,8 +18,10 @@ import random
 
 # Subject 생성 함수
 def create_subject_service(db: Session, subject_data: List[SubjectRequest]) -> List[Subject]:
-    subjects = Subject(**subject_data.model_dump())
-    created_subjects = create_subjects(db, subjects)
+    create_subject = []
+    for subject in subject_data:
+        create_subject.append(Subject(**subject.model_dump()))
+    created_subjects = create_subjects(db, create_subject)
     if not created_subjects:
         return None
 

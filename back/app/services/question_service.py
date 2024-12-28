@@ -13,8 +13,10 @@ from typing import List
 
 # Question 생성 함수
 def create_question_service(db: Session, question_data: List[QuestionRequest]) -> List[Question]:
-    questions = Question(**question_data.model_dump())
-    created_questions = create_questions(db, questions)
+    create_questions = []
+    for question in question_data:
+        create_questions.append(Question(**question.model_dump()))
+    created_questions = create_questions(db, create_questions)
     if not created_questions:
         return None
 
