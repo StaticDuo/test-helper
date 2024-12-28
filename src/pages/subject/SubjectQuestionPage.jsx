@@ -127,7 +127,6 @@ const SubjectQuestionPage = () => {
       currentQuestion={currentQuestion}
       currentIndex={currentIndex}
       questions={questions}
-      setCurrentIndex={setCurrentIndex}
       isModalOpen={isModalOpen}
       handleSubmit={handleSubmit}
     />

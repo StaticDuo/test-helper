@@ -5,7 +5,6 @@ const SubjectQuestionPresenter = ({
   currentQuestion,
   currentIndex,
   questions,
-  setCurrentIndex,
   subjectName = "과목 이름",
   isModalOpen,
   handleSubmit,
@@ -32,6 +31,7 @@ const SubjectQuestionPresenter = ({
               key={answer.answer_id}
               onClick={() => {
                 // 답안 선택 처리 로직
+                alert("답안을 선택합니다.");
               }}
             >
               {answer.answer_text}
@@ -119,6 +119,7 @@ const AnswerButton = styled.button`
   font-size: 16px;
   color: #374151;
   transition: all 0.2s;
+  cursor: pointer;
 
   &:hover {
     background: #f3f4f6;
