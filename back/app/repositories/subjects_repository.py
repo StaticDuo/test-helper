@@ -45,7 +45,7 @@ def get_questions_by_subject_id(db: Session, subject_id: int) -> List[QuestionRe
     return (
         db.query(Question)
         .join(Exam, Exam.exam_id == Question.exam_id)
-        .options(joinedload(Question.exam), joinedload(Question.answers))
+        .options(joinedload(Question.answers))
         .filter(Exam.subject_id == subject_id)
         .all()
     )
