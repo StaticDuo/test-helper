@@ -1,73 +1,76 @@
+import random
+from typing import List, Optional
 from sqlalchemy.orm import Session, joinedload
 from app.models.exam import Exam
 from app.models.question import Question
 from app.schemas.exam_schema import ExamRequest
+from app.repositories.exams_repository import (
+    create_exams,
+    get_exams,
+    get_exam_by_id,
+    get_questions_by_exam,
+    update_exam,
+    delete_exam,
+)
 
 
 # Exam 생성 함수
-def create_exam(db: Session, exam_data: ExamRequest) -> Exam:
-    new_exam = Exam(**exam_data.model_dump())
-    db.add(new_exam)
-    db.commit()
-    db.refresh(new_exam)
+def create_exam_service(db: Session, exam_data: ExamRequest) -> List[Exam]:
+    create_exam = []
+    for exam in exam_data:
+        create_exam.append(Exam(**exam.model_dump()))
+    created_exams = create_exams(db, create_exam)
+    if not created_exams:
+        return None
 
-    return new_exam
+    return created_exams
 
 
 # Exam 조회 함수
-def get_exam(db: Session) -> Exam:
-    return db.query(Exam).all()
+def get_exams_service(db: Session, name: Optional[str] = None) -> List[Exam]:
+    exams = get_exams(db, name)
+    if not exams:
+        return None
+
+    return exams
 
 
 # 단일 Exam 조회 함수
-def get_exam_by_id(db: Session, exam_id: int) -> Exam:
-    return db.query(Exam).filter(Exam.exam_id == exam_id).first()
+def get_exam_by_id_service(db: Session, exam_id: int) -> Exam:
+    exam = get_exam_by_id(db, exam_id)
+    if not exam:
+        return None
+
+    return exam
 
 
 # Exam에 속한 Questions 조회 함수
-def get_questions_by_exam(db: Session, exam_id: int) -> Question:
-    exam = db.query(Exam).options(joinedload(Exam.questions).joinedload(Question.answers)).filter(Exam.exam_id == exam_id).first()
+def get_questions_by_exam_service(db: Session, exam_id: int, limit: Optional[int] = 10, randomize: Optional[bool] = True) -> Question:
+    questions = get_questions_by_exam(db, exam_id)
+    if randomize:
+        selected_questions = random.sample(questions, min(len(questions), limit))
+    else:
+        selected_questions = questions[:limit]
 
-    questions = [
-        {
-            "question_id": question.question_id,
-            "question_number": question.question_number,
-            "question_text": question.question_text,
-            "question_type": question.question_type,
-            "answers": [
-                {
-                    "answer_id": answer.answer_id, 
-                    "answer_text": answer.answer_text, 
-                    "is_correct": answer.is_correct
-                } for answer in question.answers
-            ],
-        }
-        for question in exam.questions
-    ]
-
-    return questions
+    return selected_questions
 
 
 # Exam 수정 함수
-def patch_exam_by_id(db: Session, exam_id: int, exam_data: ExamRequest) -> Exam:
-    patched_exam = get_exam_by_id(db, exam_id)
+def patch_exam_by_id_service(db: Session, exam_id: int, exam_data: ExamRequest) -> Exam:
+    exam = get_exam_by_id(db, exam_id)
 
-    if patched_exam:
+    if exam:
         update_data = exam_data.model_dump(exclude_unset=True)
         for key, value in update_data.items():
-            setattr(patched_exam, key, value)
+            setattr(exam, key, value)
 
-    db.commit()
-    db.refresh(patched_exam)
-
-    return patched_exam
+    return update_exam(db, exam)
 
 
 # Exam 삭제 함수
-def delete_exam_by_id(db: Session, exam_id: int) -> Exam:
+def delete_exam_by_id_service(db: Session, exam_id: int) -> Exam:
     exam = get_exam_by_id(db, exam_id)
-    if exam:
-        db.delete(exam)
-        db.commit()
+    if not exam:
+        return None
 
-    return exam
+    return delete_exam(db, exam)
