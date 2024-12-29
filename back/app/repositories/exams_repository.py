@@ -13,9 +13,9 @@ def create_exams(db: Session, exams: List[Exam]) -> List[Exam]:
         for exam in exams:
             db.refresh(exam)
         return exams
-    except SQLAlchemyError as e:
+    except SQLAlchemyError:
         db.rollback()
-        raise e
+        raise
 
 
 # Exam 조회
@@ -34,14 +34,15 @@ def get_exam_by_id(db: Session, exam_id: int) -> Exam:
 
 
 # Exam에 속한 Questions 조회
-def get_questions_by_exam(db: Session, exam_id: int) -> List[Exam]:
-    return (
-        db.query(Question).
-        options(joinedload(Question.exam), 
-                joinedload(Question.answers)).
-        filter(Question.exam_id == exam_id).
-        all()
-    )
+def get_questions_by_exam(db: Session, exam_id: int, limit: Optional[int]) -> List[Question]:
+    query = db.query(Question).options(joinedload(Question.answers)).filter(Question.exam_id == exam_id)
+
+    if limit:
+        query = query.limit(limit)
+
+    print(query)
+
+    return query.all()
 
 
 # Exam 업데이트
@@ -50,9 +51,9 @@ def update_exam(db: Session, exam: Exam) -> Exam:
         db.commit()
         db.refresh(exam)
         return exam
-    except SQLAlchemyError as e:
+    except SQLAlchemyError:
         db.rollback()
-        raise e
+        raise
 
 
 # Exam 삭제
@@ -61,6 +62,6 @@ def delete_exam(db: Session, exam: Exam):
         db.delete(exam)
         db.commit()
         return exam
-    except SQLAlchemyError as e:
+    except SQLAlchemyError:
         db.rollback()
-        raise e
+        raise

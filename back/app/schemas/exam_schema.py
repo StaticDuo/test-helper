@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import List, Optional
 
 
 # 요청(Request) 스키마
@@ -17,3 +17,14 @@ class ExamResponse(BaseModel):
     model_config = {
         "from_attributes": True  # ORM 모델과의 호환성 설정
     }
+
+
+class ExamListResponse(BaseModel):
+    message: str
+    total: int
+    data: List[ExamResponse]
+
+
+class ExamDetailResponse(BaseModel):
+    message: str
+    data: ExamResponse

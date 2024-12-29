@@ -19,3 +19,13 @@ class AnswerResponse(BaseModel):
     model_config = {
         "from_attributes": True  # ORM 모델과의 호환성 설정
     }
+
+
+class AnswerUserResponse(BaseModel):
+    answer_id: int
+    question_id: int
+    answer_text: str
+
+    model_config = {
+        "from_attributes": True  # ORM 모델과의 호환성 설정
+    }
