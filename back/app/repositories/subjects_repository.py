@@ -15,15 +15,14 @@ def create_subjects(db: Session, subjects: List[Subject]) -> List[Subject]:
         for Subject in subjects:
             db.refresh(Subject)
         return subjects
-    except SQLAlchemyError as e:
+    except SQLAlchemyError:
         db.rollback()
-        raise e
+        raise
 
 
 # Subject 조회
 def get_subjects(db: Session, name: Optional[str] = None) -> List[Subject]:
     query = db.query(Subject)
-
     if name:
         query = query.filter(Subject.name.ilike(f"%{name}%"))
 
@@ -41,33 +40,30 @@ def get_exams_by_subject_id(db: Session, subject_id: int) -> List[Exam]:
 
 
 # Subject에 속한 Questions 조회
-def get_questions_by_subject_id(db: Session, subject_id: int) -> List[QuestionResponse]:
-    return (
-        db.query(Question)
-        .join(Exam, Exam.exam_id == Question.exam_id)
-        .options(joinedload(Question.answers))
-        .filter(Exam.subject_id == subject_id)
-        .all()
-    )
+def get_questions_by_subject_id(db: Session, subject_id: int, limit: Optional[int]) -> List[QuestionResponse]:
+    query = db.query(Question).join(Question.exam).options(joinedload(Question.answers)).filter(Exam.subject_id == subject_id)
+    if limit:
+        query = query.limit(limit)
+    return query.all()
 
 
 # Subject 업데이트
-def update_subject(db: Session, Subject: Subject) -> Subject:
+def update_subject(db: Session, subject: Subject) -> Subject:
     try:
         db.commit()
-        db.refresh(Subject)
-        return Subject
-    except SQLAlchemyError as e:
+        db.refresh(subject)
+        return subject
+    except SQLAlchemyError:
         db.rollback()
-        raise e
+        raise
 
 
 # Subject 삭제
-def delete_subject(db: Session, Subject: Subject):
+def delete_subject(db: Session, subject: Subject):
     try:
-        db.delete(Subject)
+        db.delete(subject)
         db.commit()
-        return Subject
-    except SQLAlchemyError as e:
+        return subject
+    except SQLAlchemyError:
         db.rollback()
-        raise e
+        raise
