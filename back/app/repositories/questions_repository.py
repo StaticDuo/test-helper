@@ -12,13 +12,13 @@ def create_questions(db: Session, questions: List[Question]) -> List[Question]:
         for question in questions:
             db.refresh(question)
         return questions
-    except SQLAlchemyError as e:
+    except SQLAlchemyError:
         db.rollback()
-        raise e
+        raise
 
 
 # Question 조회
-def get_all_questions(db: Session) -> List[Question]:
+def get_questions(db: Session) -> List[Question]:
     return db.query(Question).all()
 
 
@@ -33,9 +33,9 @@ def update_question(db: Session, question: Question) -> Question:
         db.commit()
         db.refresh(question)
         return question
-    except SQLAlchemyError as e:
+    except SQLAlchemyError:
         db.rollback()
-        raise e
+        raise
 
 
 # Question 삭제
@@ -44,6 +44,6 @@ def delete_question(db: Session, question: Question):
         db.delete(question)
         db.commit()
         return question
-    except SQLAlchemyError as e:
+    except SQLAlchemyError:
         db.rollback()
-        raise e
+        raise
