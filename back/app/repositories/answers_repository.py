@@ -12,13 +12,13 @@ def create_answers(db: Session, answers: List[Answer]) -> List[Answer]:
         for answer in answers:
             db.refresh(answer)
         return answers
-    except SQLAlchemyError as e:
+    except SQLAlchemyError:
         db.rollback()
-        raise e
+        raise
 
 
 # Answer 조회
-def get_all_answers(db: Session) -> List[Answer]:
+def get_answers(db: Session) -> List[Answer]:
     return db.query(Answer).all()
 
 
@@ -33,9 +33,9 @@ def update_answer(db: Session, answer: Answer) -> Answer:
         db.commit()
         db.refresh(answer)
         return answer
-    except SQLAlchemyError as e:
+    except SQLAlchemyError:
         db.rollback()
-        raise e
+        raise
 
 
 # Answer 삭제
@@ -44,6 +44,6 @@ def delete_answer(db: Session, answer: Answer):
         db.delete(answer)
         db.commit()
         return answer
-    except SQLAlchemyError as e:
+    except SQLAlchemyError:
         db.rollback()
-        raise e
+        raise
