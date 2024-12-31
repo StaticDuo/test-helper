@@ -74,7 +74,7 @@ def get_exam_by_id_endpoint(exam_id: int, db: Session = Depends(get_db)):
     exam = get_exam_by_id_service(db, exam_id)
 
     return ExamDetailResponse(
-        message="Exams have been successfully fetched.", 
+        message="Exam has been successfully fetched.", 
         data=exam
     )
 

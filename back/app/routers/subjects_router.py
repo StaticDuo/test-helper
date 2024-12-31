@@ -1,7 +1,7 @@
 from typing import List, Optional
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
-from app.schemas.subject_schema import SubjectDetailResponse, SubjectListResponse, SubjectRequest, SubjectResponse
+from app.schemas.subject_schema import SubjectDetailResponse, SubjectListResponse, SubjectRequest
 from app.schemas.exam_schema import ExamListResponse
 from app.schemas.question_schema import QuestionListResponse
 from app.db import get_db
@@ -40,7 +40,7 @@ def create_subject_endpoint(subjects: List[SubjectRequest], db: Session = Depend
     )
 
 
-@router.get("/subjects", response_model=List[SubjectResponse], status_code=200)
+@router.get("/subjects", response_model=SubjectListResponse, status_code=200)
 def get_subject_endpoint(db: Session = Depends(get_db), name: Optional[str] = Query(None)):
     """
     검색 조건에 맞는 과목 정보를 가져오는 엔드포인트
@@ -142,7 +142,7 @@ def patch_subject_by_id_endpoint(subject_id: int, patch_subject: SubjectRequest,
     subject = patch_subject_by_id_service(db, subject_id, patch_subject)
 
     return SubjectDetailResponse(
-        message="Subject has been successfully fetched.", 
+        message="Subject has been successfully patched.", 
         data=subject
     )
 
@@ -162,7 +162,7 @@ def delete_subject_by_id_endpoint(subject_id: int, db: Session = Depends(get_db)
     subject = delete_subject_by_id_service(db, subject_id)
     
     return SubjectDetailResponse(
-        message="Subject has been successfully fetched.", 
+        message="Subject has been successfully deleted.", 
         data=subject
     )
     

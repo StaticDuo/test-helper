@@ -92,9 +92,10 @@ def patch_question_by_id_endpoint(question_id: int, patch_question: QuestionRequ
     question = patch_question_by_id_service(db, question_id, patch_question)
 
     return QuestionDetailResponse(
-        message="Question has been successfully fetched.", 
+        message="Question has been successfully patched.", 
         data=question
     )
+
 
 @router.delete("/questions/{question_id}", response_model=QuestionDetailResponse, status_code=200)
 def delete_question_by_id_endpoint(question_id: int, db: Session = Depends(get_db)):
@@ -111,6 +112,6 @@ def delete_question_by_id_endpoint(question_id: int, db: Session = Depends(get_d
     question = delete_question_by_id_service(db, question_id)
 
     return QuestionDetailResponse(
-        message="Question has been successfully fetched.", 
+        message="Question has been successfully deleted.", 
         data=question
     )
