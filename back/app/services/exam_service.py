@@ -46,7 +46,6 @@ def get_exam_by_id_service(db: Session, exam_id: int) -> ExamResponse:
 # Exam에 속한 Questions 조회 함수
 def get_questions_by_exam_service(db: Session, exam_id: int, limit: Optional[int] = 10, randomize: Optional[bool] = True) -> List[QuestionResponse]:
     questions = get_questions_by_exam(db, exam_id, limit=None)
-
     if not questions:
         raise HTTPException(status_code=404, detail="Question not found")
 

@@ -115,4 +115,3 @@ def delete_answer_by_id_endpoint(answer_id: int, db: Session = Depends(get_db)):
         message="Answer has been successfully deleted.", 
         data=answer
     )
-    

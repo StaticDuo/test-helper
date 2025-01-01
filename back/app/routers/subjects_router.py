@@ -165,4 +165,3 @@ def delete_subject_by_id_endpoint(subject_id: int, db: Session = Depends(get_db)
         message="Subject has been successfully deleted.", 
         data=subject
     )
-    

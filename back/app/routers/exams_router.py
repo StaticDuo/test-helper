@@ -142,4 +142,3 @@ def delete_exam_by_id_endpoint(exam_id: int, db: Session = Depends(get_db)):
         message="Exam has been successfully deleted.", 
         data=exam
     )
-    

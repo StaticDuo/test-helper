@@ -21,7 +21,6 @@ def create_exams(db: Session, exams: List[Exam]) -> List[Exam]:
 # Exam 조회
 def get_exams(db: Session, name: Optional[str] = None) -> List[Exam]:
     query = db.query(Exam)
-
     if name:
         query = query.filter(Exam.name.ilike(f"%{name}%"))
 
@@ -36,11 +35,8 @@ def get_exam_by_id(db: Session, exam_id: int) -> Exam:
 # Exam에 속한 Questions 조회
 def get_questions_by_exam(db: Session, exam_id: int, limit: Optional[int]) -> List[Question]:
     query = db.query(Question).options(joinedload(Question.answers)).filter(Question.exam_id == exam_id)
-
     if limit:
         query = query.limit(limit)
-
-    print(query)
 
     return query.all()
 
