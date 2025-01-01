@@ -71,7 +71,7 @@ def get_questions_by_subject_service(
 
 
 # Subject 수정 함수
-def patch_subject_by_id_service(db: Session, subject_id: int, subject_data: SubjectRequest) -> Subject:
+def patch_subject_by_id_service(db: Session, subject_id: int, subject_data: SubjectRequest) -> SubjectResponse:
     subject = get_subject_by_id(db, subject_id)
     if not subject:
         return HTTPException(status_code=404, detail="Subject not found")
@@ -84,7 +84,7 @@ def patch_subject_by_id_service(db: Session, subject_id: int, subject_data: Subj
 
 
 # Subject 삭제 함수
-def delete_subject_by_id_service(db: Session, subject_id: int) -> Subject:
+def delete_subject_by_id_service(db: Session, subject_id: int) -> SubjectResponse:
     subject = get_subject_by_id(db, subject_id)
     if not subject:
         return HTTPException(status_code=404, detail="Subject not found")
