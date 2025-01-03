@@ -134,8 +134,12 @@ def authenticate_user(db: Session, user: User) -> Optional[User]:
 # JWT 토큰 생성
 def create_token(data: dict, expires_delta: timedelta) -> str:
     to_encode = data.copy()
-    expire = datetime.now(timezone.utc) + expires_delta
-    to_encode.update({"exp": expire})
+    issue_at = datetime.now(timezone.utc)
+    expire = issue_at + expires_delta
+    to_encode.update({
+        "iat": issue_at,
+        "exp": expire
+    })
     return jwt.encode(to_encode, settings.jwt.SECRET_KEY, algorithm=settings.jwt.ALGORITHM)
 
 
