@@ -13,4 +13,7 @@ class Question(Base):
     question_type = Column(String(10), nullable=False)  # '0': 주관식 or '1': 객관식
 
     exam = relationship("Exam", back_populates="questions")
+    user_exam_answer = relationship("UserExamAnswer", back_populates="questions")
+    
     answers = relationship("Answer", back_populates="question")
+    

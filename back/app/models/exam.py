@@ -11,5 +11,6 @@ class Exam(Base):
     name = Column(String(100), nullable=False)
 
     subject = relationship("Subject", back_populates="exams")
+    
     questions = relationship("Question", back_populates="exam")
     user_exams = relationship("UserExam", back_populates="exam")

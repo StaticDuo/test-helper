@@ -12,3 +12,5 @@ class Answer(Base):
     is_correct = Column(Boolean, nullable=False)
 
     question = relationship("Question", back_populates="answers")
+    user_exam_answer = relationship("UserExamAnswer", back_populates="answers")
+    

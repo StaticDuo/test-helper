@@ -14,3 +14,5 @@ class UserExam(Base):
 
     user = relationship("User", back_populates="user_exams")
     exam = relationship("Exam", back_populates="user_exams")
+    
+    user_exam_answers = relationship("UserExamAnswer", back_populates="user_exam")
