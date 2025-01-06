@@ -50,7 +50,7 @@ def get_answer_endpoint(db: Session = Depends(get_db)):
     answers = get_answers_service(db)
 
     return AnswerListResponse(
-        message="Answers have been successfully posted.", 
+        message="Answers have been successfully fetched.", 
         total=len(answers),
         data=answers
     )

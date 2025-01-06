@@ -12,8 +12,8 @@ def create_subjects(db: Session, subjects: List[Subject]) -> List[Subject]:
     try:
         db.add_all(subjects)
         db.commit()
-        for Subject in subjects:
-            db.refresh(Subject)
+        for subject in subjects:
+            db.refresh(subject)
         return subjects
     except SQLAlchemyError:
         db.rollback()
